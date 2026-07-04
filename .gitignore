@@ -1,0 +1,20 @@
+# Python
+.venv/
+_pycache_/
+*.pyc
+
+# Environment
+.env
+
+# Node
+node_modules/
+
+# Vite
+dist/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
