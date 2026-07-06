@@ -1,8 +1,20 @@
-
 from fastapi import FastAPI
+from app.db.database import Base, engine
+from app.models.user import User
+from app.routes.user import router as user_router
 
-app = FastAPI()
+app = FastAPI(
+    title="AI Document Assistant API",
+    version="1.0.0"
+)
+
+Base.metadata.create_all(bind=engine)
+
+# Register Routes
+app.include_router(user_router)
 
 @app.get("/")
 def home():
-    return {"message": "AI Startup Builder Backend is Running 🚀"}
+    return {
+        "message": "Backend Running 🚀"
+    }

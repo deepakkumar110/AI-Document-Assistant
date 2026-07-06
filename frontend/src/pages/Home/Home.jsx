@@ -1,5 +1,9 @@
+
+import Contact from "../../components/Contact";
 import Navbar from "../../components/Navbar";
 import UploadCard from "../../components/UploadCard";
+import Features from "../../components/Features";
+import Footer from "../../components/Footer";
 
 export default function Home() {
   return (
@@ -36,7 +40,11 @@ export default function Home() {
 
         <UploadCard />
 
+        <Features />
+
       </main>
+
+      <Footer />
     </div>
   );
 }
