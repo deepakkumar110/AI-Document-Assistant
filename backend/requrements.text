@@ -6,3 +6,12 @@ python-dotenv
 python-multipart
 passlib[bcrypt]
 python-jose[cryptography]
+aiofiles
+pymupdf
+pypdf
+langchain
+langchain-community
+langchain-huggingface
+sentence-transformers
+faiss-cpu
+chromadb

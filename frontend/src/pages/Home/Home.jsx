@@ -4,6 +4,7 @@ import Navbar from "../../components/Navbar";
 import UploadCard from "../../components/UploadCard";
 import Features from "../../components/Features";
 import Footer from "../../components/Footer";
+import ChatBox from "../../components/ChatBox";
 
 export default function Home() {
   return (
@@ -39,6 +40,7 @@ export default function Home() {
         </div>
 
         <UploadCard />
+        <ChatBox />
 
         <Features />
 

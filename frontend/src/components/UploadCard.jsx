@@ -1,11 +1,55 @@
 import { useState } from "react";
+import axios from "axios";
 
 export default function UploadCard() {
+  const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleFileChange = (e) => {
-    if (e.target.files.length > 0) {
-      setFileName(e.target.files[0].name);
+    const selectedFile = e.target.files[0];
+
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileName(selectedFile.name);
+      setMessage("");
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      alert("Please select a PDF.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      setLoading(true);
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/pdf/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      setMessage("✅ PDF uploaded successfully!");
+      console.log(response.data);
+
+      // Future me isi filename se chat karenge
+      localStorage.setItem("document_id", response.data.filename);
+
+    } catch (error) {
+      console.error(error);
+      setMessage("❌ Upload failed.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,11 +86,16 @@ export default function UploadCard() {
           </p>
 
           <button
+            onClick={handleUpload}
             className="mt-6 rounded-xl bg-green-500 px-6 py-3 font-semibold transition hover:bg-green-600"
           >
-            Upload PDF
+            {loading ? "Uploading..." : "Upload PDF"}
           </button>
         </>
+      )}
+
+      {message && (
+        <p className="mt-4 text-cyan-400">{message}</p>
       )}
 
     </div>
