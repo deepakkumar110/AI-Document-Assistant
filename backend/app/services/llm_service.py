@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
+from app.services.prompts import SYSTEM_PROMPT
 
 load_dotenv()
 
@@ -10,18 +11,33 @@ llm = ChatGoogleGenerativeAI(
     temperature=0.2
 )
 
+
 def generate_answer(context, question):
+
     prompt = f"""
-You are an AI Document Assistant.
+{SYSTEM_PROMPT}
 
-Answer ONLY using the context below.
+==========================
+DOCUMENT CONTEXT
+==========================
 
-Context:
 {context}
 
-Question:
+==========================
+USER QUESTION
+==========================
+
 {question}
+
+Remember:
+- Use ONLY the provided document.
+- If information is missing, clearly say it is not available.
+- Use proper Markdown formatting.
+- For summaries, use headings.
+- For MCQs, use numbered questions with options.
+- For key points, use bullet points.
 """
 
     response = llm.invoke(prompt)
+
     return response.content

@@ -6,7 +6,7 @@ import uuid
 from app.services.pdf_service import extract_text_from_pdf
 from app.services.chunk_service import create_chunks
 from app.services.vector_store import store_chunks
-from app.services.rag_service import ask_document
+from app.services.langgraph_agent import ask_agent
 
 router = APIRouter(
     prefix="/pdf",
@@ -53,7 +53,8 @@ async def upload_pdf(file: UploadFile = File(...)):
 
 @router.post("/ask")
 async def ask_pdf(document_id: str, question: str):
-    answer = ask_document(
+
+    answer = ask_agent(
         document_id=document_id,
         question=question
     )
