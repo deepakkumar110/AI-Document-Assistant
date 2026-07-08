@@ -1,5 +1,6 @@
 from langchain_community.vectorstores import FAISS
 from app.services.embedding_service import get_embedding_model
+import os
 
 # Load embedding model
 embeddings = get_embedding_model()
@@ -20,6 +21,7 @@ def save_vector_store(vector_store, path="app/vector_db"):
     """
     Save FAISS vector store to disk.
     """
+    os.makedirs(path, exist_ok=True)
     vector_store.save_local(path)
 
 
@@ -38,4 +40,10 @@ def store_chunks(chunks, document_id):
     """
     Create and save vector store for uploaded document.
     """
+    vector_store = create_vector_store(chunks)
+
     path = f"app/vector_db/{document_id}"
+
+    save_vector_store(vector_store, path)
+
+    return vector_store

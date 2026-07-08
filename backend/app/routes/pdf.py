@@ -1,5 +1,4 @@
 from fastapi import APIRouter, UploadFile, File
-from app.services.rag_service import ask_document
 import aiofiles
 import os
 import uuid
@@ -7,6 +6,7 @@ import uuid
 from app.services.pdf_service import extract_text_from_pdf
 from app.services.chunk_service import create_chunks
 from app.services.vector_store import store_chunks
+from app.services.rag_service import ask_document
 
 router = APIRouter(
     prefix="/pdf",
@@ -14,7 +14,6 @@ router = APIRouter(
 )
 
 UPLOAD_DIR = "app/uploads"
-
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
@@ -36,7 +35,7 @@ async def upload_pdf(file: UploadFile = File(...)):
     # Create chunks
     chunks = create_chunks(text)
 
-    # Store chunks in ChromaDB
+    # Save vector store
     store_chunks(
         chunks=chunks,
         document_id=filename
@@ -50,22 +49,14 @@ async def upload_pdf(file: UploadFile = File(...)):
         "total_chunks": len(chunks),
         "preview": chunks[0] if chunks else ""
     }
-from app.services.rag_service import get_relevant_chunks
 
-@router.post("/ask")
-async def ask_question(document_id: str, question: str):
-    chunks = get_relevant_chunks(
-        document_id=document_id,
-        query=question
-    )
 
-    return {
-        "question": question,
-        "relevant_chunks": chunks
-    }
 @router.post("/ask")
 async def ask_pdf(document_id: str, question: str):
-    answer = ask_document(document_id, question)
+    answer = ask_document(
+        document_id=document_id,
+        question=question
+    )
 
     return {
         "question": question,
