@@ -6,7 +6,7 @@ import uuid
 from app.services.pdf_service import extract_text_from_pdf
 from app.services.chunk_service import create_chunks
 from app.services.vector_store import store_chunks
-from app.services.langgraph_agent import ask_agent
+from app.services.rag_service import ask_document
 
 router = APIRouter(
     prefix="/pdf",
@@ -29,13 +29,9 @@ async def upload_pdf(file: UploadFile = File(...)):
         content = await file.read()
         await out_file.write(content)
 
-    # Extract text
     text = extract_text_from_pdf(file_path)
-
-    # Create chunks
     chunks = create_chunks(text)
 
-    # Save vector store
     store_chunks(
         chunks=chunks,
         document_id=filename
@@ -54,10 +50,18 @@ async def upload_pdf(file: UploadFile = File(...)):
 @router.post("/ask")
 async def ask_pdf(document_id: str, question: str):
 
-    answer = ask_agent(
+    print("========== ASK PDF ==========")
+    print("DOCUMENT:", document_id)
+    print("QUESTION:", question)
+
+    answer = ask_document(
         document_id=document_id,
         question=question
     )
+
+    print("ANSWER:", answer)
+    print("TYPE:", type(answer))
+    print("=============================")
 
     return {
         "question": question,
