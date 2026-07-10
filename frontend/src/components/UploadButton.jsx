@@ -27,20 +27,29 @@ export default function UploadButton({ setUploadedFile }) {
         }
       );
 
-      // Current PDF
+      console.log("UPLOAD RESPONSE:", response.data);
+
+      if (!response.data.filename) {
+        console.error("Filename missing:", response.data);
+        alert("Backend did not return filename.");
+        return;
+      }
+
       localStorage.setItem("document_id", response.data.filename);
       localStorage.setItem("current_pdf", file.name);
 
-      // PDF History
+      console.log(
+        "Saved document_id:",
+        localStorage.getItem("document_id")
+      );
+
       const oldHistory =
         JSON.parse(localStorage.getItem("pdf_history")) || [];
 
-      // Duplicate remove
       const updatedHistory = oldHistory.filter(
         (item) => item.filename !== response.data.filename
       );
 
-      // New PDF top pe add
       updatedHistory.unshift({
         filename: response.data.filename,
         name: file.name,
@@ -55,13 +64,10 @@ export default function UploadButton({ setUploadedFile }) {
         setUploadedFile(file.name);
       }
 
-
-
-      // Sidebar refresh
       window.dispatchEvent(new Event("storage"));
 
     } catch (error) {
-      console.error(error);
+      console.error("UPLOAD ERROR:", error);
       alert("❌ Upload failed.");
     }
   };

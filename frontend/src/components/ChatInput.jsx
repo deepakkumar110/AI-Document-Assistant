@@ -16,14 +16,15 @@ export default function ChatInput({
 
     const document_id = localStorage.getItem("document_id");
 
-    if (!document_id) {
+    console.log("DOCUMENT ID:", document_id);
+
+    if (!document_id || document_id === "undefined") {
       alert("Please upload a PDF first.");
       return;
     }
 
     const userQuestion = question;
 
-    // User message add
     setMessages((prev) => [
       ...prev,
       {
@@ -41,13 +42,12 @@ export default function ChatInput({
         null,
         {
           params: {
-            document_id,
+            document_id: document_id,
             question: userQuestion,
           },
         }
       );
 
-      // AI response add
       setMessages((prev) => [
         ...prev,
         {
@@ -56,7 +56,7 @@ export default function ChatInput({
         },
       ]);
     } catch (error) {
-      console.error(error);
+      console.error("ASK ERROR:", error);
 
       setMessages((prev) => [
         ...prev,
@@ -79,7 +79,6 @@ export default function ChatInput({
 
   return (
     <div className="border-t border-slate-800 bg-slate-950 p-5">
-
       <div className="mx-auto flex max-w-5xl items-end gap-3 rounded-2xl border border-slate-700 bg-slate-900 p-3">
 
         <UploadButton
