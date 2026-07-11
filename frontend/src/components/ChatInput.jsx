@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Send } from "lucide-react";
+import { motion } from "framer-motion";
 import axios from "axios";
 import UploadButton from "./UploadButton";
 
@@ -10,13 +11,12 @@ export default function ChatInput({
 }) {
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
+  const textareaRef = useRef(null);
 
   const sendMessage = async () => {
     if (!question.trim()) return;
 
     const document_id = localStorage.getItem("document_id");
-
-    console.log("DOCUMENT ID:", document_id);
 
     if (!document_id || document_id === "undefined") {
       alert("Please upload a PDF first.");
@@ -34,6 +34,11 @@ export default function ChatInput({
     ]);
 
     setQuestion("");
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
+
     setLoading(true);
 
     try {
@@ -42,7 +47,7 @@ export default function ChatInput({
         null,
         {
           params: {
-            document_id: document_id,
+            document_id,
             question: userQuestion,
           },
         }
@@ -56,7 +61,7 @@ export default function ChatInput({
         },
       ]);
     } catch (error) {
-      console.error("ASK ERROR:", error);
+      console.error(error);
 
       setMessages((prev) => [
         ...prev,
@@ -78,37 +83,101 @@ export default function ChatInput({
   };
 
   return (
-    <div className="border-t border-slate-800 bg-slate-950 p-5">
-      <div className="mx-auto flex max-w-5xl items-end gap-3 rounded-2xl border border-slate-700 bg-slate-900 p-3">
+    <div className="border-t border-slate-700 bg-[#0D1B2A] p-5">
+
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="mx-auto flex max-w-5xl items-end gap-3 rounded-2xl border border-slate-700 bg-[#1E293B] p-3 shadow-xl"
+      >
 
         <UploadButton
           setUploadedFile={setUploadedFile}
         />
 
         <textarea
+          ref={textareaRef}
           rows={1}
           value={question}
-          onChange={(e) => setQuestion(e.target.value)}
+          onChange={(e) => {
+            setQuestion(e.target.value);
+
+            const ta = textareaRef.current;
+
+            ta.style.height = "auto";
+            ta.style.height = `${Math.min(
+              ta.scrollHeight,
+              180
+            )}px`;
+          }}
           onKeyDown={handleKeyDown}
           placeholder="Ask anything about your PDF..."
-          className="flex-1 resize-none bg-transparent p-2 text-white outline-none"
+          className="flex-1 resize-none overflow-y-auto bg-transparent p-2 text-white placeholder:text-slate-400 outline-none"
         />
-
         <button
           onClick={sendMessage}
           disabled={loading}
-          className="rounded-full bg-cyan-500 p-3 transition hover:bg-cyan-600 disabled:opacity-50"
+          className="rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 p-3 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <Send size={20} className="text-white" />
+          {loading ? (
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{
+                repeat: Infinity,
+                duration: 1,
+                ease: "linear",
+              }}
+              className="h-5 w-5 rounded-full border-2 border-white border-t-transparent"
+            />
+          ) : (
+            <Send size={20} />
+          )}
         </button>
 
-      </div>
+      </motion.div>
 
       {loading && (
-        <p className="mt-3 text-center text-sm text-cyan-400">
-          🤖 AI is thinking...
-        </p>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-3 flex items-center justify-center gap-2 text-cyan-400"
+        >
+          <span>AI is thinking</span>
+
+          <motion.span
+            animate={{ opacity: [0.2, 1, 0.2] }}
+            transition={{
+              repeat: Infinity,
+              duration: 1,
+            }}
+          >
+            ●
+          </motion.span>
+
+          <motion.span
+            animate={{ opacity: [0.2, 1, 0.2] }}
+            transition={{
+              repeat: Infinity,
+              duration: 1,
+              delay: 0.2,
+            }}
+          >
+            ●
+          </motion.span>
+
+          <motion.span
+            animate={{ opacity: [0.2, 1, 0.2] }}
+            transition={{
+              repeat: Infinity,
+              duration: 1,
+              delay: 0.4,
+            }}
+          >
+            ●
+          </motion.span>
+        </motion.div>
       )}
+
     </div>
   );
 }

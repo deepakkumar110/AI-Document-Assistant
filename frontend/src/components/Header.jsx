@@ -2,7 +2,7 @@ import { FileText, Sparkles } from "lucide-react";
 
 export default function Header({ uploadedFile }) {
   return (
-    <div className="flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950 px-8">
+    <div className="flex h-20 items-center justify-between border-b border-slate-700 bg-slate-950 px-8">
 
       {/* Left */}
       <div>

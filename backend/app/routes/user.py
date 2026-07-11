@@ -69,6 +69,46 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
             "email": db_user.email
         }
     }
+@router.delete("/delete/{document_id}")
+async def delete_pdf(document_id: str):
+
+    pdf_path = os.path.join(
+        "app/uploads",
+        document_id
+    )
+
+    ocr_path = os.path.join(
+        "app/ocr_cache",
+        document_id.replace(".pdf", ".txt")
+    )
+
+    vector_path = os.path.join(
+        "app/vector_db",
+        document_id
+    )
+
+    deleted = []
+
+    # Delete PDF
+    if os.path.exists(pdf_path):
+        os.remove(pdf_path)
+        deleted.append("PDF")
+
+    # Delete OCR Cache
+    if os.path.exists(ocr_path):
+        os.remove(ocr_path)
+        deleted.append("OCR Cache")
+
+    # Delete FAISS Folder
+    if os.path.exists(vector_path):
+        shutil.rmtree(vector_path)
+        deleted.append("Vector DB")
+
+    return {
+        "success": True,
+        "deleted": deleted,
+        "message": "Document deleted successfully."
+    }
 
 
 @router.get("/profile")
