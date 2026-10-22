@@ -1,0 +1,42 @@
+Deepak Kumar
++91 6264233353
+|
+deepakmaliya6264@gmail.com
+|
+LinkedIn
+|
+GitHub
+Profile
+B.Tech (Data Science) student with hands-on experience in Python, SQL, FastAPI, MySQL, REST APIs, and software
+troubleshooting. Skilled in backend development, database-driven systems, and machine learning solutions. Strong analytical
+and problem-solving abilities with practical exposure to API integration, debugging, and technical documentation. Seeking a
+career as a Junior System Engineer.
+Work Experience
+Data Analytics Intern
+Nov 2025 – Feb 2026
+Unified Mentor Pvt. Ltd.
+• Cleaned, analyzed, and visualized real-world datasets using Python, SQL, Excel, and Power BI.
+• Built reports and dashboards ensuring accuracy, consistency, and documentation.
+• Enhanced analytical and troubleshooting skills through practical data projects.
+Projects
+Customer Churn Prediction
+• Built ML models (Random Forest, Logistic Regression) with preprocessing and feature engineering.
+• Developed FastAPI REST API, React frontend, and MySQL database for predictions and history tracking.
+Email Fraud Detection
+• Designed fraud classification system using TF-IDF and LinearSVC.
+• Integrated FastAPI REST API, React + Tailwind CSS frontend, and MySQL for real-time predictions.
+Skills
+Programming: Python, SQL, JavaScript
+Backend & Frontend: FastAPI, React, HTML, CSS, Tailwind CSS
+Database: MySQL
+Data & AI: Machine Learning, NLP, Pandas, NumPy, Scikit-learn
+Tools: Git, GitHub, MS Excel, Power BI
+Other: Computer Fundamentals, Troubleshooting, REST APIs, API Integration
+Education
+Bachelor of Technology (B.Tech) in Data Science
+2023 – 2027
+RGPV University, Bhopal | Bansal Institute of Research & Technology, Bhopal
+Currently in 4th Year
+Certifications
+GenAI Powered Data Analytics – Forage
+Data Analytics Internship Certificate – Unified Mentor Pvt. Ltd.

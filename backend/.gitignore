@@ -1,22 +1,32 @@
+# Environment variables and secrets
 
+.env
+.env.*
+!.env.example
 
 # Python
+
+**pycache**/
+*.py[cod]
 .venv/
-_pycache_/
-*.pyc
+venv/
 
-# Environment
-.env
+# Uploaded and generated files
 
-# Node
+backend/app/uploads/
+backend/app/ocr_cache/
+backend/app/chroma_db/
+
+# Frontend dependencies and build
+
 node_modules/
-
-# Vite
 dist/
 
-# OS Files
-.DS_Store
-Thumbs.db
+# IDE files
 
-# VS Code
+.idea/
 .vscode/
+
+# Logs
+
+*.log

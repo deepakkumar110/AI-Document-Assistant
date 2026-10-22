@@ -1,0 +1,42 @@
+DEEPAK KUMAR 
++91 6264233353  |  deepakmaliya6264@gmail.com  |  LinkedIn  |  GitHub 
+PROFILE 
+B.Tech (Data Science) student with hands-on full-stack development experience, including building React frontends, 
+FastAPI backends, and end-to-end web applications. Proficient in C++, Python, JavaScript, and Object-Oriented 
+Programming, with working knowledge of MySQL and version control using Git/GitHub. Strong problem-solving and 
+analytical skills, with additional hands-on exposure to AI/ML tools such as LLMs and Machine Learning through 
+personal projects. 
+PROJECTS 
+AI Document Analyzer  |  LLM, RAG, Python, FastAPI, React, JavaScript  |  GitHub Link 
+● Built an AI-powered document analysis system using LLMs integrated with a Retrieval-Augmented 
+Generation (RAG) pipeline for context-aware text understanding, delivering answers in ~3.2 seconds per 
+query on average. 
+● Built a FastAPI backend to serve the RAG pipeline and a React frontend with JavaScript for document upload 
+and an interactive chat interface, enabling seamless user interaction with the AI backend. 
+● Implemented vector embeddings and semantic search to retrieve relevant document chunks, reducing 
+hallucinations and improving response accuracy. 
+● Managed source code and iterative feature development using Git and GitHub, maintaining a clean commit 
+history throughout the project lifecycle. 
+Customer Churn Prediction  |  Machine Learning, Python, Scikit-learn, FastAPI, MySQL  |  GitHub Link 
+● Built a machine learning classification model using Scikit-learn to predict customer churn with Random 
+Forest and Logistic Regression algorithms. 
+● Designed and queried a MySQL database to load and store customer data, and performed exploratory data 
+analysis using Matplotlib and feature engineering using Pandas and NumPy to identify key churn indicators. 
+● Deployed the trained model as a FastAPI service to enable real-time churn prediction, achieving ~80% 
+predictive accuracy and enabling data-driven retention strategies. 
+● Evaluated model performance using accuracy, precision, recall, and confusion matrix, and version-controlled 
+the codebase using Git and GitHub. 
+SKILLS 
+Programming: C++, Python, JavaScript, Object-Oriented Programming (OOP) 
+Web & Frameworks: React, FastAPI 
+Databases: MySQL 
+Version Control: Git, GitHub 
+AI/ML (Additional Skills): Machine Learning, LLM, RAG, NumPy, Pandas, Scikit-learn, Matplotlib 
+EDUCATION 
+Bachelor of Technology (B.Tech) in Data Science 
+RGPV University, Bhopal  |  Bansal Institute of Research & Technology, Bhopal 
+2023 – 2027  |  Currently in 4th Year 
+CERTIFICATIONS 
+● GenAI Powered Data Analytics — Forage 
+● Data Analytics Training & Certification — Unified Mentor Pvt. Ltd. (3 Months) — Training in data cleaning, 
+EDA, Python, MySQL, Excel, and Power BI.

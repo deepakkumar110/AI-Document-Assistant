@@ -1,86 +1,108 @@
-import fitz
-import easyocr
-from pdf2image import convert_from_path
-import tempfile
 import os
+import tempfile
+from pathlib import Path
 
-# OCR Reader
+import easyocr
+import fitz
+from pdf2image import convert_from_path
+
+
+# Store extracted text for reuse
+APP_DIR = Path(__file__).resolve().parents[1]
+CACHE_DIR = APP_DIR / "ocr_cache"
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+# Initialize OCR reader
+# First run may download the required OCR model.
 reader = easyocr.Reader(["en"], gpu=False)
 
-# OCR Cache Folder
-CACHE_DIR = "app/ocr_cache"
-os.makedirs(CACHE_DIR, exist_ok=True)
 
+def extract_text_from_pdf(pdf_path: str) -> str:
+    """
+    Extract text from a PDF.
+    If the PDF is scanned and contains no extractable text,
+    use EasyOCR to recognize text from its pages.
+    """
 
-def extract_text_from_pdf(pdf_path: str):
+    pdf_file = Path(pdf_path)
 
-    # Cache file
-    pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
-    cache_file = os.path.join(CACHE_DIR, f"{pdf_name}.txt")
+    if not pdf_file.exists():
+        raise FileNotFoundError(f"PDF file not found: {pdf_file}")
 
-    # ===============================
-    # OCR Cache
-    # ===============================
-    if os.path.exists(cache_file):
-        print("✅ OCR Cache Found")
+    if pdf_file.suffix.lower() != ".pdf":
+        raise ValueError("Only PDF files are supported.")
 
-        with open(cache_file, "r", encoding="utf-8") as f:
-            return f.read()
+    # Use the unique uploaded filename for caching
+    cache_file = CACHE_DIR / f"{pdf_file.stem}.txt"
 
-    # ===============================
-    # Normal PDF Text Extraction
-    # ===============================
-    doc = fitz.open(pdf_path)
+    if cache_file.exists():
+        cached_text = cache_file.read_text(encoding="utf-8")
+        if cached_text.strip():
+            return cached_text
 
-    text = ""
+    # STEP 1: Extract embedded text using PyMuPDF
+    extracted_text = []
 
-    for page in doc:
-        text += page.get_text()
+    try:
+        with fitz.open(str(pdf_file)) as document:
+            for page in document:
+                page_text = page.get_text("text")
+                if page_text.strip():
+                    extracted_text.append(page_text)
 
-    doc.close()
+    except Exception as error:
+        raise ValueError(
+            "Could not read this PDF. The file may be corrupted or invalid."
+        ) from error
 
-    # Text PDF
-    if text.strip():
+    text = "\n\n".join(extracted_text).strip()
 
-        print("✅ Text PDF Detected")
-
-        with open(cache_file, "w", encoding="utf-8") as f:
-            f.write(text)
-
+    # STEP 2: Return embedded text when available
+    if text:
+        cache_file.write_text(text, encoding="utf-8")
         return text
 
-    # ===============================
-    # OCR
-    # ===============================
-    print("⚠️ Scanned PDF Detected. Starting OCR...")
+    # STEP 3: If scanned PDF, perform OCR
+    print("No embedded text found. Starting OCR...")
 
-    images = convert_from_path(pdf_path)
+    try:
+        images = convert_from_path(str(pdf_file))
+        ocr_pages = []
 
-    ocr_text = ""
+        for image in images:
+            temp_path = None
 
-    for image in images:
+            try:
+                with tempfile.NamedTemporaryFile(
+                    suffix=".png",
+                    delete=False
+                ) as temp_file:
+                    temp_path = temp_file.name
 
-        with tempfile.NamedTemporaryFile(
-            suffix=".png",
-            delete=False
-        ) as temp:
+                image.save(temp_path, format="PNG")
 
-            image.save(temp.name)
+                results = reader.readtext(
+                    temp_path,
+                    detail=0,
+                    paragraph=True
+                )
 
-            result = reader.readtext(
-                temp.name,
-                detail=0,
-                paragraph=True
-            )
+                page_text = "\n".join(results).strip()
+                ocr_pages.append(page_text)
 
-            ocr_text += "\n".join(result) + "\n"
+            finally:
+                if temp_path and os.path.exists(temp_path):
+                    os.remove(temp_path)
 
-        os.remove(temp.name)
+        text = "\n\n".join(ocr_pages).strip()
 
-    # Save OCR Cache
-    with open(cache_file, "w", encoding="utf-8") as f:
-        f.write(ocr_text)
+    except Exception as error:
+        raise RuntimeError(
+            "PDF OCR failed. Check EasyOCR and Poppler installation."
+        ) from error
 
-    print("✅ OCR Completed & Cached")
+    # STEP 4: Save extracted text in cache
+    if text:
+        cache_file.write_text(text, encoding="utf-8")
 
-    return ocr_text
+    return text
